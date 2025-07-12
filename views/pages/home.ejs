@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>StackIt - Questions</title>
+</head>
+<body>
+  <h1>All Questions</h1>
+  <a href="/ask">Ask a Question</a>
+  <hr>
+
+  <% if (questions.length === 0) { %>
+    <p>No questions yet. Be the first to ask!</p>
+  <% } else { %>
+    <ul>
+      <% questions.forEach(q => { %>
+        <li>
+          <strong><%= q.title %></strong><br>
+          <p><%= q.description %></p>
+          <small>Asked on <%= q.createdAt.toDateString() %></small>
+        </li>
+        <hr>
+      <% }) %>
+    </ul>
+  <% } %>
+</body>
+</html>

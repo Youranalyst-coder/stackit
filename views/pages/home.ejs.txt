@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>StackIt - Home</title>
+</head>
+<body>
+  <% if (userId) { %>
+    <p>Logged in as user ID: <%= userId %></p>
+    <form method="POST" action="/auth/logout">
+      <button type="submit">Logout</button>
+    </form>
+    <p><a href="/questions/ask">Ask a Question</a></p>
+  <% } else { %>
+    <p><a href="/auth/login">Login</a> or <a href="/auth/register">Register</a> to ask questions.</p>
+  <% } %>
+
+  <h1>Welcome to StackIt!</h1>
+</body>
+</html>

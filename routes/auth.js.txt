@@ -1,0 +1,58 @@
+// routes/auth.js
+const express = require('express');
+const router = express.Router();
+const User = require('../models/User');
+
+// Register form
+router.get('/register', (req, res) => {
+  res.render('pages/register');
+});
+
+// Register POST
+router.post('/register', async (req, res) => {
+  const { username, email, password } = req.body;
+  try {
+    let user = await User.findOne({ email });
+    if(user) return res.send('User already exists');
+
+    user = new User({ username, email, password });
+    await user.save();
+    req.session.userId = user._id;
+    res.redirect('/');
+  } catch(err) {
+    console.error(err);
+    res.send('Error during registration');
+  }
+});
+
+// Login form
+router.get('/login', (req, res) => {
+  res.render('pages/login');
+});
+
+// Login POST
+router.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if(!user) return res.send('Invalid credentials');
+
+    const isMatch = await user.matchPassword(password);
+    if(!isMatch) return res.send('Invalid credentials');
+
+    req.session.userId = user._id;
+    res.redirect('/');
+  } catch(err) {
+    console.error(err);
+    res.send('Error during login');
+  }
+});
+
+// Logout
+router.post('/logout', (req, res) => {
+  req.session.destroy(() => {
+    res.redirect('/');
+  });
+});
+
+module.exports = router;
